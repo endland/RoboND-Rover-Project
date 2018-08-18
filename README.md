@@ -2,6 +2,7 @@
 [image_0]: ./misc/rover_image.jpg
 [![Udacity - Robotics NanoDegree Program](https://s3-us-west-1.amazonaws.com/udacity-robotics/Extra+Images/RoboND_flag.png)](https://www.udacity.com/robotics)
 # Search and Sample Return Project
+# Firt project for Robotics NanoDegree program by KZI
 
 
 ![alt text][image_0] 

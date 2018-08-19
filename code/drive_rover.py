@@ -51,15 +51,19 @@ class RoverState():
         self.brake = 0 # Current brake value
         self.nav_angles = None # Angles of navigable terrain pixels
         self.nav_dists = None # Distances of navigable terrain pixels
+        # added status
+        self.wall_angles = None
+        self.wall_dists = None
         self.ground_truth = ground_truth_3d # Ground truth worldmap
         self.mode = 'forward' # Current mode (can be forward or stop)
-        self.throttle_set = 0.2 # Throttle setting when accelerating
+        self.throttle_set = 0.3 # Throttle setting when accelerating
         self.brake_set = 10 # Brake setting when braking
         # The stop_forward and go_forward fields below represent total count
         # of navigable terrain pixels.  This is a very crude form of knowing
         # when you can keep going and when you should stop.  Feel free to
         # get creative in adding new fields or modifying these!
-        self.stop_forward = 50 # Threshold to initiate stopping
+        #self.stop_forward = 50 # Threshold to initiate stopping
+        self.stop_forward = 400 # Threshold to initiate stopping
         self.go_forward = 500 # Threshold to go forward again
         self.max_vel = 2 # Maximum velocity (meters/second)
         # Image output from perception step
@@ -77,6 +81,7 @@ class RoverState():
         self.near_sample = 0 # Will be set to telemetry value data["near_sample"]
         self.picking_up = 0 # Will be set to telemetry value data["picking_up"]
         self.send_pickup = False # Set to True to trigger rock pickup
+        self.samples_found = 0 # To count the number of samples found
 # Initialize our rover 
 Rover = RoverState()
 
@@ -116,6 +121,8 @@ def telemetry(sid, data):
             out_image_string1, out_image_string2 = create_output_images(Rover)
 
             # The action step!  Send commands to the rover!
+            #commands = (Rover.throttle, Rover.brake, Rover.steer)
+            #send_control(commands, out_image_string1, out_image_string2)
  
             # Don't send both of these, they both trigger the simulator
             # to send back new telemetry so we must only send one
@@ -182,6 +189,7 @@ def send_pickup():
         pickup,
         skip_sid=True)
     eventlet.sleep(0)
+    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Remote Driving')
     parser.add_argument(

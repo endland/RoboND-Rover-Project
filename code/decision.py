@@ -60,6 +60,27 @@ def decision_step(Rover):
                     # Set steer to mean angle
                     Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
                     Rover.mode = 'forward'
+        # KZI
+        elif Rover.picking_up == 1:
+            Rover.throttle = 0
+            Rover.steer = 0
+            Rover.brake = Rover.brake_set
+            Rover.mode = 'stop'
+
+        elif Rover.near_sample == 1:
+            Rover.brake = Rover.brake_set
+            Rover.mode = 'stop'
+            Rover.steer = 0
+            Rover.send_pickup = True
+            Rover.samples_found += 1
+
+        elif Rover.mode == 'rock_found':
+            if Rover.vel < Rover.max_vel:
+                Rover.throttle = Rover.throttle_set
+            else:
+                Rover.throttle = 0
+            Rover.brake = 0
+            Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
     # Just to make the rover do something 
     # even if no modifications have been made to the code
     else:
@@ -68,8 +89,8 @@ def decision_step(Rover):
         Rover.brake = 0
         
     # If in a state where want to pickup a rock send pickup command
-    if Rover.near_sample and Rover.vel == 0 and not Rover.picking_up:
-        Rover.send_pickup = True
+    #if Rover.near_sample and Rover.vel == 0 and not Rover.picking_up:
+    #    Rover.send_pickup = True
     
     return Rover
 
